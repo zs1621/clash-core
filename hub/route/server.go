@@ -89,11 +89,11 @@ func Start(addr string, secret string) {
 
 	l, err := net.Listen("tcp", addr)
 	if err != nil {
-		log.Errorln("External controller listen error: %s", err)
+		log.Errorf("External controller listen error: %s", err)
 		return
 	}
 	serverAddr = l.Addr().String()
-	log.Infoln("RESTful API listening at: %s", serverAddr)
+	log.Infof("RESTful API listening at: %s", serverAddr)
 	if err = http.Serve(l, r); err != nil {
 		log.Errorln("External controller serve error: %s", err)
 	}

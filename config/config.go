@@ -406,7 +406,7 @@ func parseProxies(cfg *RawConfig) (proxies map[string]C.Proxy, providersMap map[
 	}
 
 	for _, provider := range providersMap {
-		log.Infoln("Start initial provider %s", provider.Name())
+		log.Infof("Start initial provider %s", provider.Name())
 		if err := provider.Initial(); err != nil {
 			return nil, nil, fmt.Errorf("initial proxy provider %s error: %w", provider.Name(), err)
 		}
@@ -433,7 +433,7 @@ func parseProxies(cfg *RawConfig) (proxies map[string]C.Proxy, providersMap map[
 			continue
 		}
 
-		log.Infoln("Start initial compatible provider %s", pd.Name())
+		log.Infof("Start initial compatible provider %s", pd.Name())
 		if err := pd.Initial(); err != nil {
 			return nil, nil, err
 		}

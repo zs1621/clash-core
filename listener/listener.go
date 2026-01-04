@@ -88,13 +88,13 @@ func createListener(inbound C.Inbound, tcpIn chan<- C.ConnContext, udpIn chan<- 
 	tcpCreator := tcpListenerCreators[inbound.Type]
 	udpCreator := udpListenerCreators[inbound.Type]
 	if tcpCreator == nil && udpCreator == nil {
-		log.Errorln("inbound type %s not support.", inbound.Type)
+		log.Errorf("inbound type %s not support.", inbound.Type)
 		return
 	}
 	if tcpCreator != nil {
 		tcpListener, err := tcpCreator(addr, tcpIn)
 		if err != nil {
-			log.Errorln("create addr %s tcp listener error. err:%v", addr, err)
+			log.Errorf("create addr %s tcp listener error. err:%v", addr, err)
 			return
 		}
 		tcpListeners[inbound] = tcpListener
@@ -102,26 +102,26 @@ func createListener(inbound C.Inbound, tcpIn chan<- C.ConnContext, udpIn chan<- 
 	if udpCreator != nil {
 		udpListener, err := udpCreator(addr, udpIn)
 		if err != nil {
-			log.Errorln("create addr %s udp listener error. err:%v", addr, err)
+			log.Errorf("create addr %s udp listener error. err:%v", addr, err)
 			return
 		}
 		udpListeners[inbound] = udpListener
 	}
-	log.Infoln("inbound %s create success.", inbound.ToAlias())
+	log.Infof("inbound %s create success.", inbound.ToAlias())
 }
 
 func closeListener(inbound C.Inbound) {
 	listener := tcpListeners[inbound]
 	if listener != nil {
 		if err := listener.Close(); err != nil {
-			log.Errorln("close tcp address `%s` error. err:%s", inbound.ToAlias(), err.Error())
+			log.Errorf("close tcp address `%s` error. err:%s", inbound.ToAlias(), err.Error())
 		}
 		delete(tcpListeners, inbound)
 	}
 	listener = udpListeners[inbound]
 	if listener != nil {
 		if err := listener.Close(); err != nil {
-			log.Errorln("close udp address `%s` error. err:%s", inbound.ToAlias(), err.Error())
+			log.Errorf("close udp address `%s` error. err:%s", inbound.ToAlias(), err.Error())
 		}
 		delete(udpListeners, inbound)
 	}
@@ -267,19 +267,19 @@ func PatchTunnel(tunnels []config.Tunnel, tcpIn chan<- C.ConnContext, udpIn chan
 		if elm.network == "tcp" {
 			l, err := tunnel.New(elm.addr, elm.target, elm.proxy, tcpIn)
 			if err != nil {
-				log.Errorln("Start tunnel %s error: %s", elm.target, err.Error())
+				log.Errorf("Start tunnel %s error: %s", elm.target, err.Error())
 				continue
 			}
 			tunnelTCPListeners[key] = l
-			log.Infoln("Tunnel(tcp/%s) proxy %s listening at: %s", elm.target, elm.proxy, tunnelTCPListeners[key].Address())
+			log.Infof("Tunnel(tcp/%s) proxy %s listening at: %s", elm.target, elm.proxy, tunnelTCPListeners[key].Address())
 		} else {
 			l, err := tunnel.NewUDP(elm.addr, elm.target, elm.proxy, udpIn)
 			if err != nil {
-				log.Errorln("Start tunnel %s error: %s", elm.target, err.Error())
+				log.Errorf("Start tunnel %s error: %s", elm.target, err.Error())
 				continue
 			}
 			tunnelUDPListeners[key] = l
-			log.Infoln("Tunnel(udp/%s) proxy %s listening at: %s", elm.target, elm.proxy, tunnelUDPListeners[key].Address())
+			log.Infof("Tunnel(udp/%s) proxy %s listening at: %s", elm.target, elm.proxy, tunnelUDPListeners[key].Address())
 		}
 	}
 }
