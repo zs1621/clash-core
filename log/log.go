@@ -29,32 +29,60 @@ func (e *Event) Type() string {
 	return e.LogLevel.String()
 }
 
-func Infoln(format string, v ...any) {
-	event := newLog(INFO, format, v...)
+func Infof(format string, v ...any) {
+	event := newLog(INFO, fmt.Sprintf(format, v...))
 	logCh <- event
 	print(event)
 }
 
-func Warnln(format string, v ...any) {
-	event := newLog(WARNING, format, v...)
+func Warnf(format string, v ...any) {
+	event := newLog(WARNING, fmt.Sprintf(format, v...))
 	logCh <- event
 	print(event)
 }
 
-func Errorln(format string, v ...any) {
-	event := newLog(ERROR, format, v...)
+func Errorf(format string, v ...any) {
+	event := newLog(ERROR, fmt.Sprintf(format, v...))
 	logCh <- event
 	print(event)
 }
 
-func Debugln(format string, v ...any) {
-	event := newLog(DEBUG, format, v...)
+func Debugf(format string, v ...any) {
+	event := newLog(DEBUG, fmt.Sprintf(format, v...))
 	logCh <- event
 	print(event)
 }
 
-func Fatalln(format string, v ...any) {
+func Fatalf(format string, v ...any) {
 	log.Fatalf(format, v...)
+}
+
+func Infoln(v ...any) {
+	event := newLog(INFO, fmt.Sprint(v...))
+	logCh <- event
+	print(event)
+}
+
+func Warnln(v ...any) {
+	event := newLog(WARNING, fmt.Sprint(v...))
+	logCh <- event
+	print(event)
+}
+
+func Errorln(v ...any) {
+	event := newLog(ERROR, fmt.Sprint(v...))
+	logCh <- event
+	print(event)
+}
+
+func Debugln(v ...any) {
+	event := newLog(DEBUG, fmt.Sprint(v...))
+	logCh <- event
+	print(event)
+}
+
+func Fatalln(v ...any) {
+	log.Fatalln(v...)
 }
 
 func Subscribe() observable.Subscription {
@@ -93,9 +121,9 @@ func print(data Event) {
 	}
 }
 
-func newLog(logLevel LogLevel, format string, v ...any) Event {
+func newLog(logLevel LogLevel, payload string) Event {
 	return Event{
 		LogLevel: logLevel,
-		Payload:  fmt.Sprintf(format, v...),
+		Payload:  payload,
 	}
 }

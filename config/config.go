@@ -507,7 +507,7 @@ func parseHosts(cfg *RawConfig) (*trie.DomainTrie, error) {
 
 	// add default hosts
 	if err := tree.Insert("localhost", net.IP{127, 0, 0, 1}); err != nil {
-		log.Errorln("insert localhost to host error: %s", err.Error())
+		log.Warnf("insert localhost to host error: %s", err.Error())
 	}
 
 	if len(cfg.Hosts) != 0 {

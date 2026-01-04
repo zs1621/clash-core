@@ -72,7 +72,7 @@ func main() {
 	}
 
 	if err := config.Init(C.Path.HomeDir()); err != nil {
-		log.Fatalln("Initial configuration directory error: %s", err.Error())
+		log.Fatalf("Initial configuration directory error: %s", err.Error())
 	}
 
 	if testConfig {
@@ -97,7 +97,7 @@ func main() {
 	}
 
 	if err := hub.Parse(options...); err != nil {
-		log.Fatalln("Parse config error: %s", err.Error())
+		log.Fatalf("Parse config error: %s", err.Error())
 	}
 
 	sigCh := make(chan os.Signal, 1)
